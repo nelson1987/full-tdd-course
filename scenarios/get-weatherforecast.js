@@ -5,13 +5,11 @@ import { check, sleep } from "k6";
 export const options = {
   thresholds: {
     // Assert that 99% of requests finish within 3000ms.
-    http_req_duration: ["p(99) < 3000"],
+    http_req_duration: ["p(99) < 250"],
   },
   // Ramp the number of virtual users up and down
   stages: [
-    { duration: "30s", target: 15 },
-    { duration: "1m", target: 15 },
-    { duration: "20s", target: 0 },
+    { duration: "5s", target: 1000 },
   ],
 };
 
@@ -20,5 +18,11 @@ export default function () {
   let res = http.get("http://localhost:5159/weatherforecast");
   // Validate response status
   check(res, { "status was 200": (r) => r.status == 200 });
+  if(
+    check(res, { "max duration was 250ms": (r) => r.timings.duration < 250 })
+  ){
+    fail("Max duration was not met");
+  };
+  
   sleep(1);
 }
