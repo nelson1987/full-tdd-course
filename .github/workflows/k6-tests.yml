@@ -1,26 +1,53 @@
-name: k6 Performance Tests
+# Nome do workflow que aparecerá na aba "Actions" do GitHub
+name: Teste de Stress com k6
 
+# Gatilhos: quando este workflow deve ser executado
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [ main ] # Executa em pushes para a branch 'main'
+  pull_request:
+    branches: [ main ] # Executa em pull requests para a branch 'main'
 
+# Define os jobs (tarefas) a serem executados
 jobs:
-  performance-test:
+  # Nome do job
+  k6-stress-test:
+    # Máquina virtual onde o job será executado. 'ubuntu-latest' é uma boa escolha padrão.
     runs-on: ubuntu-latest
+
+    # Passos sequenciais que compõem o job
     steps:
-      - uses: actions/checkout@v4
+      # 1. Baixa o código do seu repositório para a máquina virtual
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Configura o ambiente .NET Core/SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # <-- IMPORTANTE: Mude para a versão do .NET que seu projeto usa
+
+      # 3. Restaura as dependências do projeto
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4. Compila a sua API em modo Release
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # 5. Inicia a sua API em background
+      #    - O '&' no final é crucial para que o comando rode em segundo plano e o workflow continue
+      #    - Altere o caminho para o seu arquivo .csproj se necessário
+      - name: Start API
+        run: |
+          dotnet run --project ./Pigbank.Api/Pigbank.Api.csproj --urls "http://localhost:5000" &
+          sleep 10 # Dá um tempo para a API iniciar completamente
+
+      # 6. Instala e configura a ferramenta k6
       - name: Setup k6
-        uses: grafana/setup-k6-action@v1
-        with:
-          version: v0.49.0 # Specify the k6 version
-      - name: Run k6 tests
-        uses: grafana/run-k6-action@v1
-        with:
-          script: your_k6_script.js # Path to your k6 test script
-          # cloud: true # Uncomment to run tests in Grafana Cloud k6
-          # cloud-project-id: your-project-id # Required for cloud tests
-          # token: ${{ secrets.GRAFANA_CLOUD_K6_TOKEN }} # Secret for cloud token
+        uses: k6io/setup-k6@v2
+
+      # 7. Executa o teste de stress com k6
+      #    - O '--throw' faz com que o passo falhe se as condições do teste (checks) não forem atendidas
+      - name: Run k6 stress test
+        run: k6 run --throw your_k6_script.js
