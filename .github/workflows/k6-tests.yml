@@ -45,9 +45,9 @@ jobs:
 
       # 6. Instala e configura a ferramenta k6
       - name: Setup k6
-        uses: k6io/setup-k6@v2
-
-      # 7. Executa o teste de stress com k6
-      #    - O '--throw' faz com que o passo falhe se as condições do teste (checks) não forem atendidas
-      - name: Run k6 stress test
+        uses: grafana/setup-k6-action@v1
+        with:
+          version: v0.49.0 # Specify the k6 version
+      - name: Run k6 tests
+        uses: grafana/run-k6-action@v1
         run: k6 run --throw your_k6_script.js
