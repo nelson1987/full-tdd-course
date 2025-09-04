@@ -26,7 +26,7 @@ export const options = {
 
 // Simulated user behavior
 export default function () {
-  let res = http.get("http://localhost:5159/health");
+  let res = http.get("http://localhost:5000/health");
   // Validate response status
   check(res, { "status was 200": (r) => r.status == 200 });
   // Validate max duration
