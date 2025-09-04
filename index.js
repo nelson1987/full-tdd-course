@@ -1,5 +1,6 @@
-import getHealth from "./scenarios/get-health";
-import getWeatherforecast from "./scenarios/get-weatherforecast";
+import getHealth from "./scenarios/get-health.js";
+import getWeatherforecast from "./scenarios/get-weatherforecast.js";
+import { group, sleep } from "k6";
 
 export default () => {
     group("Endpoint [GET] /health", () => {

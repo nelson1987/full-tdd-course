@@ -50,3 +50,4 @@ jobs:
           version: v0.49.0 # Specify the k6 version
       - name: Run k6 stress test
         run: k6 run --throw index.js
+        #comentario

@@ -19,7 +19,7 @@ export default function () {
   // Validate response status
   check(res, { "status was 200": (r) => r.status == 200 });
   if(
-    check(res, { "max duration was 250ms": (r) => r.timings.duration < 250 })
+    !check(res, { "max duration was 250ms": (r) => r.timings.duration < 250 })
   ){
     fail("Max duration was not met");
   };
