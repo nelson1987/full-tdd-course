@@ -15,7 +15,7 @@ export const options = {
 
 // Simulated user behavior
 export default function () {
-  let res = http.get("http://localhost:5159/weatherforecast");
+  let res = http.get("http://localhost:5000/weatherforecast");
   // Validate response status
   check(res, { "status was 200": (r) => r.status == 200 });
   if(
