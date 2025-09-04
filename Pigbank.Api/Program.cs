@@ -19,6 +19,7 @@ builder.Services.AddOpenTelemetry()
         .AddMeter("MeuAppMetrics")
         .AddMeter("MyCustomMeter")
         .AddConsoleExporter());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -30,11 +31,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapHealthChecks("/health");
+
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
-app.MapHealthChecks("/health");
 app.MapGet("/weatherforecast", () =>
     {
         var forecast = Enumerable.Range(1, 5).Select(index =>
