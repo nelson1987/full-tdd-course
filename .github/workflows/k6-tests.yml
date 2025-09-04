@@ -1,0 +1,26 @@
+name: k6 Performance Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  performance-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+        with:
+          version: v0.49.0 # Specify the k6 version
+      - name: Run k6 tests
+        uses: grafana/run-k6-action@v1
+        with:
+          script: your_k6_script.js # Path to your k6 test script
+          # cloud: true # Uncomment to run tests in Grafana Cloud k6
+          # cloud-project-id: your-project-id # Required for cloud tests
+          # token: ${{ secrets.GRAFANA_CLOUD_K6_TOKEN }} # Secret for cloud token
