@@ -1,0 +1,21 @@
+{
+  "name": "full-tdd-course",
+  "version": "1.0.0",
+  "description": "Curso de TDD em C#",
+  "main": "index.js",
+  "scripts": {
+    "test": "dotnet test /p:CollectCoverage=true /p:CoverletOutputFormat=\"lcov%2ccobertura%2copencover\"",
+    "prepare": "husky install",
+    "preinstall": "dotnet tool restore"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^16.1.6"
+  },
+  "lint-staged": {
+    "*.cs": "dotnet format --include"
+  }
+}
