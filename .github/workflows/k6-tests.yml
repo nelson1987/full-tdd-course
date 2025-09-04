@@ -50,7 +50,3 @@ jobs:
           version: v0.49.0 # Specify the k6 version
       - name: Run k6 stress test
         run: k6 run --throw index.js
-      - name: Run k6 tests
-        uses: grafana/run-k6-action@v1
-        with:
-          script: --throw index.js
