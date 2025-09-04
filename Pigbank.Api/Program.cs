@@ -1,3 +1,7 @@
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,7 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHealthChecks();
-
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resourceBuilder => resourceBuilder.AddService("meu-servico-csharp"))
+    .WithTracing(builder => builder
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddConsoleExporter()) // Envia para o endpoint padrão do OTLP, que será configurado no Docker Compose
+    .WithMetrics(builder => builder
+        .AddMeter("MeuAppMetrics")
+        .AddMeter("MyCustomMeter")
+        .AddConsoleExporter());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
