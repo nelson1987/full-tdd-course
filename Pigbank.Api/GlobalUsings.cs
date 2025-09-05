@@ -1,0 +1,12 @@
+global using System.Diagnostics;
+global using System.Diagnostics.Metrics;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Diagnostics.HealthChecks;
+global using Amazon.DynamoDBv2;
+global using Amazon.DynamoDBv2.Model;
+global using Amazon.SQS;
+global using Amazon.SQS.Model;
+global using StackExchange.Redis;
+global using FluentValidation;
+global using OpenTelemetry.Trace;
+global using System.Text.Json;
