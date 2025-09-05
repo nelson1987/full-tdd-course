@@ -18,7 +18,7 @@ public class SQSHealthCheck : IHealthCheck
     {
         try
         {
-            var response = await _sqs.ListQueuesAsync(cancellationToken);
+            var response = await _sqs.ListQueuesAsync(new Amazon.SQS.Model.ListQueuesRequest(), cancellationToken);
 
             var healthData = new Dictionary<string, object>
             {

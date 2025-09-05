@@ -12,6 +12,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using FluentValidation;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Amazon.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -123,8 +124,6 @@ builder.Services.AddOpenTelemetry()
     .WithMetrics(metrics => metrics
         .AddAspNetCoreInstrumentation()
         .AddHttpClientInstrumentation()
-        .AddRuntimeInstrumentation()
-        .AddProcessInstrumentation()
         .AddMeter("MinimalApi.Orders")
         .AddPrometheusExporter()
         .AddOtlpExporter(options =>
